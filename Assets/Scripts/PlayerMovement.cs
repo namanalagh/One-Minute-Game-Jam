@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,10 +16,15 @@ public class PlayerMovement : MonoBehaviour
     private MineDamage mineDamage;
     private float damage;
     public float playerHealth = 1;
+    public float increment= 0.5f;
+    public int score = 0;
     
     private float ySpeed;
+    private static readonly int TakeDamage = Animator.StringToHash("TakeDamage");
+
     void Start()
     {
+        InvokeRepeating(nameof(IncreaseSpeed),10f,10f);
         mineDamage = mine.GetComponent<MineDamage>();
         damage = mineDamage.damage;
         rb = GetComponent<Rigidbody2D>();
@@ -29,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 speed = new Vector2(moveSpeed, ySpeed);
         rb.velocity = speed;
-        //animator.SetFloat("Speed",moveSpeed);
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -40,12 +45,31 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Mine")
+        if (other.CompareTag("Mine"))
         {
             playerHealth -= damage;
-            Debug.Log(playerHealth);
-            animator.SetTrigger("TakeDamage");
+            animator.SetTrigger(TakeDamage);
+            other.GetComponent<Animator>().SetBool("Explode",true);
+            score -= 200;
         }
+        else if (other.CompareTag($"Fish"))
+        {
+            other.gameObject.SetActive(false);
+            score += 100;
+        }
+        else if (other.CompareTag($"BigFish"))
+        {
+            playerHealth -= damage;
+            animator.SetTrigger(TakeDamage);
+            other.gameObject.SetActive(false);
+            score -= 200;
+        }
+    }
+
+    private void IncreaseSpeed()
+    {
+        rb.velocity += new Vector2(increment, 0);
+        score += 1000;
     }
     
 }
