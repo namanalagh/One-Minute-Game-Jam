@@ -21,6 +21,9 @@ public class PlayerMovement : MonoBehaviour
     
     private float ySpeed;
     private static readonly int TakeDamage = Animator.StringToHash("TakeDamage");
+    public Vector2 speed;
+    public float yIncrement;
+    private float yUp = 0;
 
     void Start()
     {
@@ -33,15 +36,15 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Vector2 speed = new Vector2(moveSpeed, ySpeed);
+        speed = new Vector2(moveSpeed, ySpeed)+new Vector2(increment,0);
         rb.velocity = speed;
 
         if (Input.GetKey(KeyCode.W))
         {
-            ySpeed = vertSpeed;
+            ySpeed = vertSpeed+yUp;
         }
         else if (Input.GetKey(KeyCode.S))
-            ySpeed = -vertSpeed;
+            ySpeed = -vertSpeed-yUp;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -64,12 +67,19 @@ public class PlayerMovement : MonoBehaviour
             other.gameObject.SetActive(false);
             score -= 200;
         }
+        else if (other.CompareTag($"Snow"))
+        {
+            playerHealth -= damage;
+            animator.SetTrigger(TakeDamage);
+            score -= 200;
+        }
     }
 
     private void IncreaseSpeed()
     {
-        rb.velocity += new Vector2(increment, 0);
+        increment += 1.5f;
         score += 1000;
+        yUp += yIncrement;
     }
     
 }
