@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
         {
             playerHealth -= damage;
             animator.SetTrigger(TakeDamage);
+            other.gameObject.SetActive(false);
             //other.GetComponent<Animator>().SetBool("Explode",true);
             score -= 200;
         }
