@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private float damage;
     public float playerHealth = 1;
     public float increment= 0.5f;
-    public int score = 0;
+    public float score = 0;
     
     private float ySpeed;
     private static readonly int TakeDamage = Animator.StringToHash("TakeDamage");
