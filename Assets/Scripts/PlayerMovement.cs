@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 speed;
     public float yIncrement;
     private float yUp = 0;
+    private static readonly int Speed = Animator.StringToHash("Speed");
 
     void Start()
     {
@@ -38,7 +39,8 @@ public class PlayerMovement : MonoBehaviour
     {
         speed = new Vector2(moveSpeed, ySpeed)+new Vector2(increment,0);
         rb.velocity = speed;
-
+        
+        animator.SetFloat(Speed,speed.x);
         if (Input.GetKey(KeyCode.W))
         {
             ySpeed = vertSpeed+yUp;
@@ -52,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         {
             playerHealth -= damage;
             animator.SetTrigger(TakeDamage);
-            other.GetComponent<Animator>().SetBool("Explode",true);
+            //other.GetComponent<Animator>().SetBool("Explode",true);
             score -= 200;
         }
         else if (other.CompareTag($"Fish"))

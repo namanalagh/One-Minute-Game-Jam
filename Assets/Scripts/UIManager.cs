@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
         endText.enabled = false;
         panel.SetActive(false);
         image.SetActive(true);  
+        instructions.SetActive(false);
         Time.timeScale = 0f;
     }
 
